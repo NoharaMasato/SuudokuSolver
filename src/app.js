@@ -1,3 +1,23 @@
+//var mondai = [[0,7,0,0,0,9,5,0,3],
+//              [0,0,0,0,8,0,0,0,2],
+//              [0,5,8,0,4,0,0,0,1],
+//              [5,0,3,8,2,0,6,4,7],
+//              [2,8,0,0,0,7,0,0,9],
+//              [0,4,6,9,0,0,1,0,0],
+//              [6,3,4,2,9,0,7,1,5],
+//              [0,0,0,1,0,0,0,3,6],
+//              [8,1,7,5,3,6,2,9,4]]
+
+var mondai = [[0,0,0,0,0,0,0,5,0],
+              [0,4,7,0,9,0,0,0,0],
+              [0,0,0,0,8,0,7,6,2],
+              [0,0,5,9,1,0,0,0,0],
+              [0,0,8,6,4,0,3,0,0],
+              [0,0,0,0,0,0,0,9,0],
+              [0,2,0,8,0,0,0,0,5],
+              [6,0,0,0,0,0,4,8,0],
+              [8,0,0,0,0,7,0,0,0]]
+
 function print_result(){
   for (var i=0;i<9;i++){
     for (var j=0;j<9;j++){
@@ -14,18 +34,6 @@ function step_next(x,y){
     y++;
   } else x++;
   return {x,y}
-}
-
-function read_problem(file_name){
-  var fs = require('fs');
-  let text = fs.readFileSync(file_name, 'utf-8');
-
-  var input_array = text.replace(/\r?\n/g, '').split(",");
-  for (var i=0;i<9;i++){
-    for (var j=0;j<9;j++){
-      mondai[i][j] = input_array[9*i+j];
-    }
-  }
 }
 
 function dfs(x,y,v){ // 座標x,yにvが入る
@@ -67,14 +75,8 @@ function dfs(x,y,v){ // 座標x,yにvが入る
   mondai[by][bx] = 0;
 }
 
-var mondai = new Array(9);
-for(let y = 0; y < 9; y++) {
-  mondai[y] = new Array(9).fill(0);
-}
-
-read_problem("sample/sample_2.txt");
 for (var i=1;i<=9;i++){
   dfs(0,0,i);
 }
-console.log("解けません")
+console.log("解けません＂)
 
