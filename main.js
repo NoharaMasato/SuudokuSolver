@@ -72,7 +72,7 @@ for(let y = 0; y < 9; y++) {
   mondai[y] = new Array(9).fill(0);
 }
 
-read_problem("sample/sample_2.txt");
+read_problem("sample/problems/sample_2.txt");
 for (var i=1;i<=9;i++){
   dfs(0,0,i);
 }
