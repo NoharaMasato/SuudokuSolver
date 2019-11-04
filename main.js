@@ -14,40 +14,40 @@ class Suudoku {
     //x check
     var correct_answer=1;
     for (var i=0;i<9;i++){
-      var kouho = new Array(9).fill(0);
+      var kouho = new Array(10).fill(0);
       for (var j=0;j<9;j++){
         kouho[mondai[i][j]]++;
       }
-      for (var j=0;j<9;j++){
-        if (kouho[i] != 1) correct_answer = 0;
+      for (var j=1;j<=9;j++){
+        if (kouho[j] != 1) correct_answer = 0;
       }
     }
 
     //y check
     for (var i=0;i<9;i++){
-      var kouho = new Array(9).fill(0);
+      var kouho = new Array(10).fill(0);
       for (var j=0;j<9;j++){
         kouho[mondai[j][i]]++;
       }
-      for (var j=0;j<9;j++){
-        if (kouho[i] != 1) correct_answer = 0;
+      for (var j=1;j<=9;j++){
+        if (kouho[j] != 1) correct_answer = 0;
       }
     }
-
-    // check box
+// check box
     for (var i=0;i<3;i++){
       for (var j=0;j<3;j++){
-        var kouho = new Array(9).fill(0);
+        var kouho = new Array(10).fill(0);
         for (var k=0;k<3;k++){
           for (var l=0;l<3;l++){
             kouho[mondai[i*3+k][j*3+l]]++;
           }
         }
-        for (var j=0;j<9;j++){
-          if (kouho[i] != 1) correct_answer = 0;
+        for (var j=1;j<=9;j++){
+          if (kouho[j] != 1) correct_answer = 0;
         }
       }
     }
+    return correct_answer;
     //if (correct_answer == 0) console.log("correct answer");
     //else console.log("Not connrect answer");
   }
@@ -72,24 +72,26 @@ class Suudoku {
   }
 
   set_answer(){
-    if(this.answer_cnt == 0){
-      this.first_answer = new Array(9);
-      for(let y = 0; y < 9; y++) {
-        this.first_answer[y] = new Array(9).fill(0);
-      }
-      for (let i=0;i<9;i++){
-        for (let j=0;j<9;j++){
-          this.first_answer[i][j] = this.mondai[i][j];
+    console.log(this.check_all(this.mondai));
+    if (this.check_all(this.mondai) == 1){
+      if(this.answer_cnt == 0){
+        this.first_answer = new Array(9);
+        for(let y = 0; y < 9; y++) {
+          this.first_answer[y] = new Array(9).fill(0);
+        }
+        for (let i=0;i<9;i++){
+          for (let j=0;j<9;j++){
+            this.first_answer[i][j] = this.mondai[i][j];
+          }
         }
       }
+      this.answer_cnt++;
     }
-    this.check_all(this.mondai);
-    this.answer_cnt++;
   }
 
   check(x,y){
     // box check
-    let kouho = [0,0,0,0,0,0,0,0,0,0];
+    let kouho = new Array(10).fill(0);
     for (let i=parseInt(x/3)*3;i<parseInt(x/3)*3+3;i++){
       for (let j=parseInt(y/3)*3;j<parseInt(y/3)*3+3;j++){
         kouho[this.mondai[j][i]]=1;
@@ -146,9 +148,10 @@ class Suudoku {
   }
 }
 
-let suudoku = new Suudoku("sample/problems/sample_1.txt");
+let suudoku = new Suudoku("sample/problems/sample_3.txt");
 suudoku.read_problem_from_file();
 for (let i=1;i<=9;i++){
   suudoku.search(0,0,i);
 }
 suudoku.print_result();
+console.log(suudoku.answer_cnt);
