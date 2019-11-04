@@ -6,6 +6,50 @@ class Suudoku {
     }
     this.mondai = mondai;
     this.file_path = file_path;
+    this.first_answer;
+    this.answer_cnt = 0;
+  }
+
+  check_all(mondai){
+    //x check
+    var correct_answer=1;
+    for (var i=0;i<9;i++){
+      var kouho = new Array(9).fill(0);
+      for (var j=0;j<9;j++){
+        kouho[mondai[i][j]]++;
+      }
+      for (var j=0;j<9;j++){
+        if (kouho[i] != 1) correct_answer = 0;
+      }
+    }
+
+    //y check
+    for (var i=0;i<9;i++){
+      var kouho = new Array(9).fill(0);
+      for (var j=0;j<9;j++){
+        kouho[mondai[j][i]]++;
+      }
+      for (var j=0;j<9;j++){
+        if (kouho[i] != 1) correct_answer = 0;
+      }
+    }
+
+    // check box
+    for (var i=0;i<3;i++){
+      for (var j=0;j<3;j++){
+        var kouho = new Array(9).fill(0);
+        for (var k=0;k<3;k++){
+          for (var l=0;l<3;l++){
+            kouho[mondai[i*3+k][j*3+l]]++;
+          }
+        }
+        for (var j=0;j<9;j++){
+          if (kouho[i] != 1) correct_answer = 0;
+        }
+      }
+    }
+    //if (correct_answer == 0) console.log("correct answer");
+    //else console.log("Not connrect answer");
   }
 
   read_problem_from_file(){
@@ -27,32 +71,55 @@ class Suudoku {
     return {x,y}
   }
 
+  set_answer(){
+    if(this.answer_cnt == 0){
+      this.first_answer = new Array(9);
+      for(let y = 0; y < 9; y++) {
+        this.first_answer[y] = new Array(9).fill(0);
+      }
+      for (let i=0;i<9;i++){
+        for (let j=0;j<9;j++){
+          this.first_answer[i][j] = this.mondai[i][j];
+        }
+      }
+    }
+    this.check_all(this.mondai);
+    this.answer_cnt++;
+  }
+
+  check(x,y){
+    // box check
+    let kouho = [0,0,0,0,0,0,0,0,0,0];
+    for (let i=parseInt(x/3)*3;i<parseInt(x/3)*3+3;i++){
+      for (let j=parseInt(y/3)*3;j<parseInt(y/3)*3+3;j++){
+        kouho[this.mondai[j][i]]=1;
+      }
+    }
+
+    //x check
+    for (let i=0;i<9;i++){
+      kouho[this.mondai[y][i]]=1;
+    }
+
+    // y check
+    for (let i=0;i<9;i++){
+      kouho[this.mondai[i][x]]=1;
+    }
+    return kouho
+  }
+
   search(x,y,v){
     this.mondai[y][x]=v;
-    if (x==8&&y==8) this.print_result();
     let bx = x;
     let by = y;
+    if (x==8&&y==8) {
+      this.set_answer();
+      return;
+    }
     while (true){
       var {x,y} = this.step_next(x,y);
       if (this.mondai[y][x] == 0){
-        // box check
-        let kouho = [0,0,0,0,0,0,0,0,0,0];
-        for (let i=parseInt(x/3)*3;i<parseInt(x/3)*3+3;i++){
-          for (let j=parseInt(y/3)*3;j<parseInt(y/3)*3+3;j++){
-            kouho[this.mondai[j][i]]=1;
-          }
-        }
-
-        //x check
-        for (let i=0;i<9;i++){
-          kouho[this.mondai[y][i]]=1;
-        }
-
-        // y check
-        for (let i=0;i<9;i++){
-          kouho[this.mondai[i][x]]=1;
-        }
-
+        let kouho = this.check(x,y);
         for (let i=1;i<=9;i++){
           if (kouho[i]==0){
             this.search(x,y,i);
@@ -60,7 +127,10 @@ class Suudoku {
         }
         break;
       }else{
-        if (x==8&&y==8) this.print_result();
+        if (x==8&&y==8) {
+          this.set_answer();
+          return;
+        }
       }
     }
     this.mondai[by][bx] = 0;
@@ -69,11 +139,10 @@ class Suudoku {
   print_result(){
     for (let i=0;i<9;i++){
       for (let j=0;j<9;j++){
-        process.stdout.write(String(this.mondai[i][j])+" ");
+        process.stdout.write(String(this.first_answer[i][j])+" ");
       }
       console.log("");
     }
-    process.exit(0);
   }
 }
 
