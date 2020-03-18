@@ -16,7 +16,7 @@ module.exports = class Suudoku {
     let input_array = text.replace(/\r?\n/g, '').split(",");
     for (let i=0;i<9;i++){
       for (let j=0;j<9;j++){
-        this.mondai[i][j] = input_array[9*i+j];
+        this.mondai[i][j] = parseInt(input_array[9*i+j]);
       }
     }
   }
