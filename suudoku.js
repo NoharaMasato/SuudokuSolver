@@ -59,8 +59,6 @@ module.exports = class Suudoku {
       }
     }
     return correct_answer;
-    //if (correct_answer == 0) console.log("correct answer");
-    //else console.log("Not connrect answer");
   }
 
   step_next(x,y){
@@ -72,7 +70,6 @@ module.exports = class Suudoku {
   }
 
   set_answer(){
-    console.log(this.check_all(this.mondai));
     if (this.check_all(this.mondai) == 1){
       if(this.answer_cnt == 0){
         this.first_answer = new Array(9);
@@ -110,8 +107,8 @@ module.exports = class Suudoku {
     return kouho
   }
 
-  search(x,y,v){
-    this.mondai[y][x]=v;
+  search(x = -1,y = 0,v = 0){
+    if (x != -1) this.mondai[y][x]=v;
     let bx = x;
     let by = y;
     if (x==8&&y==8) {
@@ -147,4 +144,3 @@ module.exports = class Suudoku {
     }
   }
 }
-
